@@ -1,0 +1,6 @@
+*.pyc
+/slack.conf
+.tox
+tests/.cache
+.coverage
+.cache
