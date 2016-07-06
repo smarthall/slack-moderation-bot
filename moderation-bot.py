@@ -9,7 +9,7 @@ from slackclient import SlackClient
 
 def do_message(msg):
     if msg['channel'].startswith('C'):
-        print sc.api_call('chat.delete', ts=msg['ts'], channel=msg['channel'], as_user=True)
+        print(sc.api_call('chat.delete', ts=msg['ts'], channel=msg['channel'], as_user=True))
 
 config = yaml.load(open('slack.conf', 'r'))
 
@@ -17,7 +17,7 @@ sc = SlackClient(config['SLACK_TOKEN'])
 if sc.rtm_connect():
     while True:
         for event in sc.rtm_read():
-            print event
+            print(event)
             if event['type'] == u'message':
                 do_message(event);
         time.sleep(1)
