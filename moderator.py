@@ -47,6 +47,8 @@ class Bot:
                         self.do_message(event)
                     elif event['type'] == 'hello':
                         self.do_hello(event)
+                    elif event['type'] == 'user_typing':
+                        self.do_typing(event)
                 time.sleep(1)
 
     def got_channels(self, chanlist):
@@ -85,6 +87,17 @@ class Bot:
                 msg.get('text', '').startswith('ANNOUNCE:')
              ):
             self.do_scrape_message(msg)
+
+    def do_typing(self, event):
+        if event['channel'] in self.moderated_channels:
+            self.do_warn_user(event)
+
+    def do_warn_user(self, event):
+        response = self.sc.api_call('im.open', user=event['user'])
+        imchan = response['channel']['id']
+        message = TYPING_MESSAGE.format({
+        })
+        print(self.sc.api_call('chat.postMessage', channel=imchan, text=message, as_user=True))
 
     def do_message_moderation(self, msg):
         print(self.sc.api_call('chat.delete', ts=msg['ts'], channel=msg['channel'], as_user=True))
